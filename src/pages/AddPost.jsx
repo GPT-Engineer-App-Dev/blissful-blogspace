@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Box, Button, FormControl, FormLabel, Input, Textarea, VStack, Link } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const AddPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -12,10 +15,11 @@ const AddPost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic to handle post submission
-    console.log("Title:", title);
-    console.log("Content:", content);
-    console.log("Image:", image);
+    const newPost = { title, content, image };
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    storedPosts.push(newPost);
+    localStorage.setItem("posts", JSON.stringify(storedPosts));
+    navigate("/");
   };
 
   return (
